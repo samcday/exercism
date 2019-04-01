@@ -7,7 +7,6 @@ pub fn nth(n: usize) -> u32 {
             let sqrt = f64::from(*n).sqrt() as u32;
             !(2..=sqrt).any(|factor| n % factor == 0)
         })
-        .skip(n)
-        .next()
+        .nth(n)
         .unwrap()
 }
