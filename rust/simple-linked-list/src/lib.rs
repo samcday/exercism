@@ -9,6 +9,7 @@ impl<T> Node<T> {
     }
 }
 
+#[derive(Default)]
 pub struct SimpleLinkedList<T> {
     head: Option<Box<Node<T>>>,
     len: usize,
@@ -23,6 +24,10 @@ impl<T> SimpleLinkedList<T> {
         self.len
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
     pub fn push(&mut self, element: T) {
         self.len += 1;
         let head = self.head.take();
@@ -30,9 +35,7 @@ impl<T> SimpleLinkedList<T> {
     }
 
     pub fn pop(&mut self) -> Option<T> {
-        if self.head.is_none() {
-            return None;
-        }
+        self.head.as_ref()?;
 
         self.len -= 1;
         let node = self.head.take().unwrap();
