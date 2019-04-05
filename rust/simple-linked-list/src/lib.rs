@@ -1,11 +1,14 @@
+#![deny(clippy::all)]
+#![deny(clippy::pedantic)]
+
 struct Node<T> {
     data: T,
     next: Option<Box<Node<T>>>,
 }
 
 impl<T> Node<T> {
-    fn new(data: T, next: Option<Box<Node<T>>>) -> Node<T> {
-        Node { data, next }
+    fn new(data: T, next: Option<Box<Self>>) -> Self {
+        Self { data, next }
     }
 }
 
@@ -17,7 +20,7 @@ pub struct SimpleLinkedList<T> {
 
 impl<T> SimpleLinkedList<T> {
     pub fn new() -> Self {
-        SimpleLinkedList { head: None, len: 0 }
+        Self { head: None, len: 0 }
     }
 
     pub fn len(&self) -> usize {
@@ -52,8 +55,8 @@ impl<T> SimpleLinkedList<T> {
 }
 
 impl<T: Clone> SimpleLinkedList<T> {
-    pub fn rev(&self) -> SimpleLinkedList<T> {
-        let mut list = SimpleLinkedList::new();
+    pub fn rev(&self) -> Self {
+        let mut list = Self::new();
         let mut node = &self.head;
         while let Some(item) = node {
             list.push(item.data.clone());
@@ -65,7 +68,7 @@ impl<T: Clone> SimpleLinkedList<T> {
 
 impl<'a, T: Clone> From<&'a [T]> for SimpleLinkedList<T> {
     fn from(items: &[T]) -> Self {
-        let mut list = SimpleLinkedList::new();
+        let mut list = Self::new();
         items.iter().for_each(|v| list.push(v.clone()));
         list
     }
