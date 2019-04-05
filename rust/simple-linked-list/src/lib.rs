@@ -4,8 +4,8 @@ struct Node<T> {
 }
 
 impl<T> Node<T> {
-    fn new(data: T) -> Node<T> {
-        Node { data, next: None }
+    fn new(data: T, next: Option<Box<Node<T>>>) -> Node<T> {
+        Node { data, next }
     }
 }
 
@@ -25,18 +25,8 @@ impl<T> SimpleLinkedList<T> {
 
     pub fn push(&mut self, element: T) {
         self.len += 1;
-        let element = Some(Box::new(Node::new(element)));
-
-        if self.head.is_none() {
-            self.head = element;
-            return;
-        }
-
-        let mut node = self.head.as_mut().unwrap();
-        while node.next.is_some() {
-            node = node.next.as_mut().unwrap();
-        }
-        node.next = element;
+        let head = self.head.take();
+        self.head = Some(Box::new(Node::new(element, head)));
     }
 
     pub fn pop(&mut self) -> Option<T> {
@@ -45,45 +35,26 @@ impl<T> SimpleLinkedList<T> {
         }
 
         self.len -= 1;
-
-        if self.len == 0 {
-            let head = self.head.take();
-            return Some(head.unwrap().data);
-        }
-
-        let mut node = self.head.as_mut().unwrap();
-        while node.next.as_ref().unwrap().next.is_some() {
-            node = node.next.as_mut().unwrap();
-        }
-        let tail = node.next.take();
-        Some(tail.unwrap().data)
+        let node = self.head.take().unwrap();
+        self.head = node.next;
+        Some(node.data)
     }
 
     pub fn peek(&self) -> Option<&T> {
-        if self.len == 0 {
-            return None;
+        match &self.head {
+            None => None,
+            Some(node) => Some(&node.data),
         }
-
-        let mut node = self.head.as_ref().unwrap();
-        while node.next.is_some() {
-            node = node.next.as_ref().unwrap();
-        }
-        Some(&node.data)
     }
 }
 
 impl<T: Clone> SimpleLinkedList<T> {
     pub fn rev(&self) -> SimpleLinkedList<T> {
-        let mut items = vec![];
+        let mut list = SimpleLinkedList::new();
         let mut node = &self.head;
         while let Some(item) = node {
-            items.push(item.data.clone());
+            list.push(item.data.clone());
             node = &item.next;
-        }
-
-        let mut list = SimpleLinkedList::new();
-        while !items.is_empty() {
-            list.push(items.pop().unwrap())
         }
         list
     }
@@ -105,6 +76,7 @@ impl<T> Into<Vec<T>> for SimpleLinkedList<T> {
             node = item.next.take();
             list.push(item.data);
         }
+        list.reverse();
         list
     }
 }
