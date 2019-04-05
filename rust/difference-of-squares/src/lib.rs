@@ -1,3 +1,5 @@
+#![deny(clippy::all, clippy::pedantic)]
+
 pub fn square_of_sum(n: u32) -> u32 {
     (1..=n).sum::<u32>().pow(2)
 }

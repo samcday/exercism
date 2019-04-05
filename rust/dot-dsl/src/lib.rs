@@ -1,6 +1,9 @@
+#![deny(clippy::all, clippy::pedantic)]
+
 pub mod graph {
     use std::collections::HashMap;
 
+    #[derive(Default)]
     pub struct Graph<'a> {
         pub nodes: Vec<graph_items::node::Node<'a>>,
         pub edges: Vec<graph_items::edge::Edge<'a>>,
@@ -16,12 +19,12 @@ pub mod graph {
             }
         }
 
-        pub fn with_nodes(mut self, nodes: &Vec<graph_items::node::Node<'a>>) -> Self {
+        pub fn with_nodes(mut self, nodes: &[graph_items::node::Node<'a>]) -> Self {
             self.nodes.extend_from_slice(nodes);
             self
         }
 
-        pub fn with_edges(mut self, edges: &Vec<graph_items::edge::Edge<'a>>) -> Self {
+        pub fn with_edges(mut self, edges: &[graph_items::edge::Edge<'a>]) -> Self {
             self.edges.extend_from_slice(edges);
             self
         }
@@ -38,6 +41,7 @@ pub mod graph {
         }
     }
 
+    #[allow(clippy::module_name_repetitions)]
     pub mod graph_items {
         pub mod edge {
             use std::collections::HashMap;

@@ -1,3 +1,5 @@
+#![deny(clippy::all, clippy::pedantic)]
+
 pub fn verse(n: u32) -> String {
     let how_many_bottles = |num: u32| match num {
         0 => "No more bottles".to_string(),

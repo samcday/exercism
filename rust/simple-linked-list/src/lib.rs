@@ -1,5 +1,4 @@
-#![deny(clippy::all)]
-#![deny(clippy::pedantic)]
+#![deny(clippy::all, clippy::pedantic)]
 
 struct Node<T> {
     data: T,

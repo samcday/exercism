@@ -1,3 +1,5 @@
+#![deny(clippy::all, clippy::pedantic)]
+
 use std::fmt::{Display, Formatter, Result};
 
 const MINUTES_IN_DAY: i32 = 60 * 24;
@@ -17,7 +19,7 @@ impl Clock {
         while minutes < 0 {
             minutes = MINUTES_IN_DAY - minutes.abs();
         }
-        Clock(minutes)
+        Self(minutes)
     }
 
     pub fn new(hours: i32, minutes: i32) -> Self {

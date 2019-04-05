@@ -1,3 +1,5 @@
+#![deny(clippy::all, clippy::pedantic)]
+
 use chrono::{DateTime, Duration, Utc};
 
 const ONE_BILLYUN: i64 = 1_000_000_000;

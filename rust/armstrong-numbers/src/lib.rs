@@ -1,3 +1,5 @@
+#![deny(clippy::all)]
+
 pub fn is_armstrong_number(num: u32) -> bool {
     let num_str = num.to_string();
     num == num_str
