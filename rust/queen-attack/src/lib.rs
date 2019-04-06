@@ -11,11 +11,9 @@ pub struct Queen(ChessPosition);
 
 impl ChessPosition {
     pub fn new(rank: i32, file: i32) -> Option<Self> {
-        // Slightly cheating, Range::contains is currently unstable, but will be stable in 1.35.
-        if rank >= 0 && rank < 8 && file >= 0 && file < 8 {
-            Some(Self { rank, file })
-        } else {
-            None
+        match (rank, file) {
+            (0...7, 0...7) => Some(Self { rank, file }),
+            _ => None,
         }
     }
 }
