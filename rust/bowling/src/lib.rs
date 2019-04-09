@@ -18,9 +18,9 @@ impl Frame {
     fn score<I: Iterator<Item = Self>>(self, following: I) -> u16 {
         let following = following.flat_map(|frame| match frame {
             Frame::Strike => vec![10],
-            Frame::Spare(first, second)
-            | Frame::Open(first, second)
-            | Frame::Last(first, second, _) => vec![first, second],
+            Frame::Spare(first, second) | Frame::Open(first, second) | Frame::Last(first, second, _) => {
+                vec![first, second]
+            }
         });
 
         match self {

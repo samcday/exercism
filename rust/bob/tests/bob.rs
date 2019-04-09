@@ -46,10 +46,7 @@ fn test_using_acronyms_in_regular_speech() {
 
 #[test]
 fn test_forceful_question() {
-    process_response_case(
-        "WHAT THE HELL WERE YOU THINKING?",
-        "Calm down, I know what I'm doing!",
-    );
+    process_response_case("WHAT THE HELL WERE YOU THINKING?", "Calm down, I know what I'm doing!");
 }
 
 #[test]
@@ -69,10 +66,7 @@ fn test_question_with_no_letters() {
 
 #[test]
 fn test_shouting_with_special_characters() {
-    process_response_case(
-        "ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!",
-        "Whoa, chill out!",
-    );
+    process_response_case("ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!", "Whoa, chill out!");
 }
 
 #[test]
@@ -112,10 +106,7 @@ fn test_alternate_silence() {
 
 #[test]
 fn test_multiple_line_question() {
-    process_response_case(
-        "\nDoes this cryogenic chamber make me look fat?\nNo.",
-        "Whatever.",
-    );
+    process_response_case("\nDoes this cryogenic chamber make me look fat?\nNo.", "Whatever.");
 }
 
 #[test]
@@ -135,8 +126,5 @@ fn test_other_whitespace() {
 
 #[test]
 fn test_nonquestion_ending_with_whitespace() {
-    process_response_case(
-        "This is a statement ending with whitespace      ",
-        "Whatever.",
-    );
+    process_response_case("This is a statement ending with whitespace      ", "Whatever.");
 }

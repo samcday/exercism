@@ -187,8 +187,7 @@ test_read!(read_file(
 fn read_stats_by_ref_returns_wrapped_reader() {
     use paasio::ReadStats;
 
-    let input =
-        "Why, sometimes I've believed as many as six impossible things before breakfast".as_bytes();
+    let input = "Why, sometimes I've believed as many as six impossible things before breakfast".as_bytes();
     let reader = ReadStats::new(input);
     assert_eq!(reader.get_ref(), &input);
 }

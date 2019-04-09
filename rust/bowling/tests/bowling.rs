@@ -320,8 +320,7 @@ fn the_two_balls_after_a_final_strike_cannot_be_a_non_strike_followed_by_a_strik
 }
 
 #[test]
-fn second_bonus_ball_after_a_final_strike_cannot_score_an_invalid_number_of_pins_even_if_first_is_strike(
-) {
+fn second_bonus_ball_after_a_final_strike_cannot_score_an_invalid_number_of_pins_even_if_first_is_strike() {
     let mut game = BowlingGame::new();
 
     for _ in 0..18 {

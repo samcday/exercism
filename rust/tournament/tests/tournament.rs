@@ -53,8 +53,7 @@ fn a_draw_is_one_point_each() {
 
 #[test]
 fn there_can_be_more_than_one_match() {
-    let input = "Allegoric Alaskans;Blithering Badgers;win\n".to_string()
-        + "Allegoric Alaskans;Blithering Badgers;win";
+    let input = "Allegoric Alaskans;Blithering Badgers;win\n".to_string() + "Allegoric Alaskans;Blithering Badgers;win";
     let expected = "".to_string()
         + "Team                           | MP |  W |  D |  L |  P\n"
         + "Allegoric Alaskans             |  2 |  2 |  0 |  0 |  6\n"
@@ -65,8 +64,8 @@ fn there_can_be_more_than_one_match() {
 
 #[test]
 fn there_can_be_more_than_one_winner() {
-    let input = "Allegoric Alaskans;Blithering Badgers;loss\n".to_string()
-        + "Allegoric Alaskans;Blithering Badgers;win";
+    let input =
+        "Allegoric Alaskans;Blithering Badgers;loss\n".to_string() + "Allegoric Alaskans;Blithering Badgers;win";
     let expected = "".to_string()
         + "Team                           | MP |  W |  D |  L |  P\n"
         + "Allegoric Alaskans             |  2 |  1 |  0 |  1 |  3\n"

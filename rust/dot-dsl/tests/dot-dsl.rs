@@ -40,10 +40,7 @@ fn test_graph_with_one_node_with_keywords() {
 
     assert!(graph.attrs.is_empty());
 
-    assert_eq!(
-        graph.nodes,
-        vec![Node::new("a").with_attrs(&[("color", "green")])]
-    );
+    assert_eq!(graph.nodes, vec![Node::new("a").with_attrs(&[("color", "green")])]);
 }
 
 #[test]
@@ -95,10 +92,7 @@ fn test_graph_with_attributes() {
         "bar".to_string() => "true".to_string(),
     };
 
-    let graph = Graph::new()
-        .with_nodes(&nodes)
-        .with_edges(&edges)
-        .with_attrs(&attrs);
+    let graph = Graph::new().with_nodes(&nodes).with_edges(&edges).with_attrs(&attrs);
 
     assert_eq!(
         graph.nodes,
@@ -132,10 +126,7 @@ fn test_graph_stores_attributes() {
     );
 
     assert_eq!(
-        graph
-            .get_node("c")
-            .expect("node must be stored")
-            .get_attr("bim"),
+        graph.get_node("c").expect("node must be stored").get_attr("bim"),
         Some("bef")
     );
 }

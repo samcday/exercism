@@ -19,7 +19,8 @@ pub fn verse(n: u32) -> String {
         remaining = match n {
             0 => how_many_bottles(99),
             _ => how_many_bottles(n - 1),
-        }.to_lowercase()
+        }
+        .to_lowercase()
     )
 }
 
