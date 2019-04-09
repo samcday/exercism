@@ -8,12 +8,9 @@ const HEADER: &str = "Team                           | MP |  W |  D |  L |  P";
 #[derive(Default)]
 struct TeamStats(u16, u16, u16, u16, u16);
 impl std::ops::AddAssign for TeamStats {
+    #[rustfmt::skip]
     fn add_assign(&mut self, o: Self) {
-        self.0 += o.0;
-        self.1 += o.1;
-        self.2 += o.2;
-        self.3 += o.3;
-        self.4 += o.4;
+        self.0 += o.0; self.1 += o.1; self.2 += o.2; self.3 += o.3; self.4 += o.4;
     }
 }
 
