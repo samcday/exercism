@@ -38,7 +38,6 @@ fn test_puzzle_with_four_letters() {
 }
 
 #[test]
-#[ignore]
 fn test_puzzle_with_six_letters() {
     assert_alphametic_solution_eq(
         "NO + NO + TOO == LATE",
@@ -47,7 +46,6 @@ fn test_puzzle_with_six_letters() {
 }
 
 #[test]
-#[ignore]
 fn test_puzzle_with_seven_letters() {
     assert_alphametic_solution_eq(
         "HE + SEES + THE == LIGHT",
@@ -56,7 +54,6 @@ fn test_puzzle_with_seven_letters() {
 }
 
 #[test]
-#[ignore]
 fn test_puzzle_with_eight_letters() {
     assert_alphametic_solution_eq(
         "SEND + MORE == MONEY",
