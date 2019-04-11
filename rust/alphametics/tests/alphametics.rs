@@ -19,14 +19,12 @@ fn test_must_have_unique_value_for_each_letter() {
 }
 
 #[test]
-#[ignore]
 fn test_leading_zero_solution_is_invalid() {
     let answer = alphametics::solve("ACA + DD == BD");
     assert_eq!(answer, None);
 }
 
 #[test]
-#[ignore]
 fn puzzle_with_two_digits_final_carry() {
     assert_alphametic_solution_eq(
         "A + A + A + A + A + A + A + A + A + A + A + B == BCC",
@@ -35,7 +33,6 @@ fn puzzle_with_two_digits_final_carry() {
 }
 
 #[test]
-#[ignore]
 fn test_puzzle_with_four_letters() {
     assert_alphametic_solution_eq("AS + A == MOM", &[('A', 9), ('S', 2), ('M', 1), ('O', 0)]);
 }

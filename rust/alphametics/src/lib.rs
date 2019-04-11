@@ -3,6 +3,10 @@
 use std::collections::{HashMap, HashSet};
 
 pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
+    fn next_digit(letter: char, from: u8, stack: &[(char, u8)], leading_letters: &[char]) -> Option<u8> {
+        (from..=9).find(|num| !(*num == 0 && leading_letters.contains(&letter) || stack.iter().any(|(_, v)| v == num)))
+    }
+
     let mut operands = input
         .split(|c| c == '=' || c == '+')
         .map(str::trim)
@@ -56,18 +60,20 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
     // Brute force because computer can do numbers fast and stuff. Take all unique letters and put them in a list.
     // Start with the first digit, going from 0-9, pick the first number that isn't already assigned to another letter.
     let mut stack = vec![];
-    for letter in &pending_letters {
-        let digit = (0..=9).find(|num| !stack.iter().any(|(_, v)| v == num)).unwrap();
-        stack.push((*letter, digit));
-        solution.insert(*letter, digit);
+    for letter in pending_letters.iter().cloned() {
+        if let Some(digit) = next_digit(letter, 0, &stack, &leading_letters) {
+            stack.push((letter, digit));
+            solution.insert(letter, digit);
+        } else {
+            return None;
+        }
     }
 
     while !stack.is_empty() {
         while !stack.is_empty() {
             let (letter, digit) = stack.pop().unwrap();
-            solution.remove(&letter);
-            let next_digit = (digit + 1..=9).find(|n| !stack.iter().any(|(_, v)| v == n));
-            if let Some(next_digit) = next_digit {
+
+            if let Some(next_digit) = next_digit(letter, digit + 1, &stack, &leading_letters) {
                 stack.push((letter, next_digit));
                 solution.insert(letter, next_digit);
                 break;
@@ -81,23 +87,34 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
 
         while stack.len() < pending_letters.len() {
             let next_letter = pending_letters[stack.len()];
-            let next_digit = (0..=9).find(|n| !stack.iter().any(|(_, v)| v == n)).unwrap();
-            solution.insert(next_letter, next_digit);
-            stack.push((next_letter, next_digit));
+
+            if let Some(next_digit) = next_digit(next_letter, 0, &stack, &leading_letters) {
+                solution.insert(next_letter, next_digit);
+                stack.push((next_letter, next_digit));
+            } else {
+                return None;
+            }
         }
 
         if check_solution(&solution, &operands, &sum) {
             return Some(solution);
         }
-        println!("Combination! {:?}", solution);
     }
 
     None
 }
 
 fn check_solution(letters: &HashMap<char, u8>, operands: &[Vec<char>], sum: &[char]) -> bool {
-    u32::from_str_radix(&sum.iter().map(|c| letters[c].to_string()).collect::<String>(), 10).unwrap()
+    u32::from_str_radix(
+        &sum.iter().rev().map(|c| letters[c].to_string()).collect::<String>(),
+        10,
+    )
+    .unwrap()
         == operands.iter().fold(0, |acc, oper| {
-            acc + u32::from_str_radix(&oper.iter().map(|c| letters[c].to_string()).collect::<String>(), 10).unwrap()
+            acc + u32::from_str_radix(
+                &oper.iter().rev().map(|c| letters[c].to_string()).collect::<String>(),
+                10,
+            )
+            .unwrap()
         })
 }
