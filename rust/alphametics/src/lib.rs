@@ -3,10 +3,6 @@
 use std::collections::{HashMap, HashSet};
 
 pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
-    fn next_digit(letter: char, from: u8, solution: &HashMap<char, u8>, leading_letters: &[char]) -> Option<u8> {
-        (from..=9).find(|num| !(*num == 0 && leading_letters.contains(&letter) || solution.values().any(|v| v == num)))
-    }
-
     let mut operands = input
         .split(|c| c == '=' || c == '+')
         .map(str::trim)
@@ -21,11 +17,12 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
         return None;
     }
 
-    let leading_letters = operands
+    // Leading letter of each operand can't be 0. Reduces brute-force search space a bit.
+    let cant_be_zero = operands
         .iter()
         .map(|op| op.last().unwrap())
         .cloned()
-        .collect::<Vec<char>>();
+        .collect::<HashSet<char>>();
 
     let uniq_letters = operands
         .iter()
@@ -46,63 +43,38 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
     }
 
     if sum.len() > operands.iter().map(Vec::len).max().unwrap() {
-        // Sum has more digits than longest operand, that means most significant digits has to be a 1.
+        // Sum has more digits than longest operand, that means most significant digit has to be a 1
         // This reduces brute force search space a bit.
         solution.insert(*sum.last().unwrap(), 1);
     }
 
-    let pending_letters = uniq_letters
-        .iter()
-        .cloned()
-        .filter(|letter| !solution.contains_key(letter))
-        .collect::<Vec<char>>();
+    // Now we just brute-force the search space, because I suck at math and I'm lazy.
 
-    // Brute force because computer can do numbers fast and stuff. Take all unique letters and put them in a list.
-    // Start with the first digit, going from 0-9, pick the first number that isn't already assigned to another letter.
-    let mut stack = vec![];
-    for letter in pending_letters.iter().cloned() {
-        if let Some(digit) = next_digit(letter, 0, &solution, &leading_letters) {
-            stack.push((letter, digit));
-            solution.insert(letter, digit);
-        } else {
+    // depth-first recursive search.
+    fn solver<F>(pending_solution: &mut HashMap<char, u8>, letters: &HashSet<char>, operands: &Vec<Vec<char>>, sum: &Vec<char>, possible_digits: &F) -> Option<HashMap<char, u8>>
+        where F: Fn(char, &HashMap<char, u8>) -> Vec<u8> {
+        // Find the first unsolved letter that hasn't got a value plugged in.
+        let next = letters.iter().find(|x| !pending_solution.contains_key(x));
+        if next.is_none() {
+            // Full pending solution. Maybe this is the one?!
+            if check_solution(pending_solution, &operands, &sum) {
+                return Some(pending_solution.clone());
+            }
             return None;
         }
-    }
-
-    while !stack.is_empty() {
-        while !stack.is_empty() {
-            let (letter, digit) = stack.pop().unwrap();
-            solution.remove(&letter);
-
-            if let Some(next_digit) = next_digit(letter, digit + 1, &solution, &leading_letters) {
-                stack.push((letter, next_digit));
-                solution.insert(letter, next_digit);
-                break;
+        let letter = next.unwrap();
+        for num in possible_digits(*letter, pending_solution) {
+            pending_solution.insert(*letter, num);
+            if let Some(solution) = solver(pending_solution, letters, operands, sum, possible_digits) {
+                return Some(solution);
             }
         }
+        None
+    };
 
-        if stack.is_empty() {
-            // We exhausted the whole search space and came up with nada.
-            return None;
-        }
-
-        while stack.len() < pending_letters.len() {
-            let next_letter = pending_letters[stack.len()];
-
-            if let Some(next_digit) = next_digit(next_letter, 0, &solution, &leading_letters) {
-                solution.insert(next_letter, next_digit);
-                stack.push((next_letter, next_digit));
-            } else {
-                return None;
-            }
-        }
-
-        if check_solution(&solution, &operands, &sum) {
-            return Some(solution);
-        }
-    }
-
-    None
+    solver(&mut solution, &uniq_letters, &operands, &sum, &|letter: char, solution: &HashMap<char, u8>| {
+        (0u8..=9).filter(|n| !(*n == 0 && cant_be_zero.contains(&letter)) && !solution.values().any(|v| v == n)).collect()
+    })
 }
 
 fn check_solution(letters: &HashMap<char, u8>, operands: &[Vec<char>], sum: &[char]) -> bool {
