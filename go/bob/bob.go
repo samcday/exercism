@@ -1,31 +1,53 @@
 package bob
 
 import (
-	"regexp"
+	"io"
 	"strings"
+	"unicode"
 )
 
 // Hey is the solution to this exercise.
 func Hey(remark string) string {
-	remark = strings.TrimSpace(remark)
-	if remark == "" {
+	hasLetters := false
+	empty := true
+	allCaps := true
+	isQuestion := false
+	r := strings.NewReader(remark)
+	for {
+		c, _, err := r.ReadRune()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			panic(err)
+		}
+		if unicode.IsSpace(c) {
+			continue
+		}
+		empty = false
+		isQuestion = false
+		if unicode.IsLower(c) {
+			allCaps = false
+			hasLetters = true
+		}
+		if unicode.IsUpper(c) {
+			allCaps = allCaps && true
+			hasLetters = true
+		}
+		if c == '?' {
+			isQuestion = true
+		}
+	}
+
+	if empty {
 		return "Fine. Be that way!"
 	}
 
-	hasAlpha, err := regexp.Match("[a-zA-Z]", []byte(remark))
-	if err != nil {
-		panic(err)
-	}
-
-	allCaps := hasAlpha && strings.ToUpper(remark) == remark
-	isQuestion := strings.HasSuffix(remark, "?")
-
 	switch {
-	case isQuestion && allCaps:
+	case hasLetters && isQuestion && allCaps:
 		return "Calm down, I know what I'm doing!"
 	case isQuestion:
 		return "Sure."
-	case allCaps:
+	case hasLetters && allCaps:
 		return "Whoa, chill out!"
 	default:
 		return "Whatever."
