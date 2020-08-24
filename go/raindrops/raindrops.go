@@ -2,24 +2,23 @@ package raindrops
 
 import (
 	"strconv"
-	"strings"
 )
 
 // Convert is the exercise solution
 func Convert(num int) string {
-	var s strings.Builder
+	s := ""
 
 	if num%3 == 0 {
-		s.WriteString("Pling")
+		s += "Pling"
 	}
 	if num%5 == 0 {
-		s.WriteString("Plang")
+		s += "Plang"
 	}
 	if num%7 == 0 {
-		s.WriteString("Plong")
+		s += "Plong"
 	}
-	if s.Len() == 0 {
-		s.WriteString(strconv.Itoa(num))
+	if len(s) == 0 {
+		s = strconv.Itoa(num)
 	}
-	return s.String()
+	return s
 }
